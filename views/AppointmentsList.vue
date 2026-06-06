@@ -62,8 +62,7 @@ export default {
       fetch("https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/appointments")
         .then(res => res.json())
         .then(data => {
-          const parsed = JSON.parse(data.body);
-          this.appointments = parsed;
+         this.appointments = data.appointments || []; 
         });
     },
     updateStatus(appointment, newStatus) {
