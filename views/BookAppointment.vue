@@ -68,7 +68,7 @@ export default {
       fetch("https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/appointments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ body: JSON.stringify(payload) })
+        body: JSON.stringify(payload)
       })
         .then(res => res.json())
         .then(() => {
