@@ -1,3 +1,4 @@
+
 <template>
   <div>
     <nav class="navbar navbar-light bg-white shadow-sm mb-4">
@@ -6,6 +7,7 @@
         <router-link to="/" class="btn btn-outline-primary">⇆ Switch Page</router-link>
       </div>
     </nav>
+
     <div class="container">
       <div class="card shadow-sm">
         <div class="card-header">
@@ -65,9 +67,15 @@ export default {
         });
     },
     updateStatus(appointment, newStatus) {
-      
+      // Log the full appointment object and its ID
+      console.log(" appointment (proxy):", appointment);
+      const cleanAppointment = JSON.parse(JSON.stringify(appointment));
+      console.log(" Clean appointment:", cleanAppointment);
+      console.log("appointmentId:", cleanAppointment.appointmentId);
+      console.log(" appointmentId (direct):", appointment.appointmentId);
+
       const url = `https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/appointments/${appointment.appointmentId}`;
-      
+
       const payload = { status: newStatus };
 
       fetch(url, {
@@ -78,10 +86,13 @@ export default {
         body: JSON.stringify(payload)
       })
           .then(async res => {
+
             const rawBody = await res.text();
+
             if (!res.ok) {
               throw new Error(`HTTP ${res.status}: ${rawBody}`);
             }
+
             return JSON.parse(rawBody);
           })
           .then(() => {
@@ -89,10 +100,11 @@ export default {
             this.fetchAppointments(); 
           })
           .catch(err => {
-            console.error("Failed to update status:", err);
+            console.error(" Failed to update status:", err);
             alert("Update failed. See console for details.");
           });
     }
-  }
+
+     }
 };
 </script>
