@@ -50,8 +50,11 @@ export default {
     fetch("https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/slots")
       .then(res => res.json())
       .then(data => {
-        const parsed = JSON.parse(data.body);
-        this.slots = parsed.filter(s => !s.isBooked).map(s => s.slot);
+       
+        this.slots = data.slots || [];
+      })
+      .catch(err => {
+        console.error("Error fetching slots:", err);
       });
   },
   methods: {
