@@ -65,44 +65,38 @@ export default {
          this.appointments = data.appointments || []; 
         });
     },
-    updateStatus(appointment, newStatus) {
-      // Log the full appointment object and its ID
-      console.log(" appointment (proxy):", appointment);
-      const cleanAppointment = JSON.parse(JSON.stringify(appointment));
-      console.log(" Clean appointment:", cleanAppointment);
-      console.log("appointmentId:", cleanAppointment.appointmentId);
-      console.log(" appointmentId (direct):", appointment.appointmentId);
-
-      const url = `https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/appointments/${appointment.appointmentId}`;
-
-      const payload = { status: newStatus };
-
-      fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
-      })
-          .then(async res => {
-
-            const rawBody = await res.text();
-
-            if (!res.ok) {
-              throw new Error(`HTTP ${res.status}: ${rawBody}`);
-            }
-
-            return JSON.parse(rawBody);
-          })
-          .then(() => {
-            alert("Status updated!");
-            this.fetchAppointments(); 
-          })
-          .catch(err => {
-            console.error(" Failed to update status:", err);
-            alert("Update failed. See console for details.");
-          });
-    }
+      updateStatus(appointment, newStatus) {
+        const url = `https://hglk5beo2e.execute-api.us-east-1.amazonaws.com/prod/appointments/${appointment.appointmentId}`;
+        
+        
+        const payload = {
+          appointmentId: appointment.appointmentId,
+          status: newStatus
+        };
+      
+        fetch(url, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        })
+            .then(async res => {
+              const rawBody = await res.text();
+              if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${rawBody}`);
+              }
+              return JSON.parse(rawBody);
+            })
+            .then(() => {
+              alert("Status updated!");
+              this.fetchAppointments(); 
+            })
+            .catch(err => {
+              console.error("Failed to update status:", err);
+              alert("Update failed. See console for details.");
+            });
+      }
 
      }
 };
